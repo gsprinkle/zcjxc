@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ischoolbar.programmer.jxc.mapper.ProductMapper">
+	<resultMap type="com.ischoolbar.programmer.jxc.pojo.ProductBrandCategoryVo"
+		id="productResultMap">
+		<id column="product_id" property="productId" />
+		<result column="product_name" property="productName" />
+		<result column="brand_id" property="brandId" />
+		<result column="cid" property="cid" />
+		<result column="product_price" property="productPrice" />
+		<result column="order_id" property="orderId" />
+		<result column="state" property="state" />
+		<result column="product_remark" property="productRemark" />
+		<result column="brand_name" property="brandName" />
+		<result column="cname" property="cname" />
+	</resultMap>
+	<select id="selectPageVo" resultMap="productResultMap" parameterType="com.ischoolbar.programmer.jxc.entity.Product">
+		select p.*,b.brand_name,c.cname from product p
+		left join brand b on p.brand_id =b.brand_id
+		left join category c on p.cid = c.cid
+		<where>
+			<if test="product.productName != null">
+				and p.product_name like '%${product.productName}%'
+			</if>
+			<if test="product.brandId != null and product.brandId != 1000">
+				and p.brand_id = ${product.brandId}
+			</if>
+			<if test="product.cids != null and product.cids != ''">
+				and p.cid in (${product.cids})
+			</if>
+		</where>
+	</select>
+</mapper>

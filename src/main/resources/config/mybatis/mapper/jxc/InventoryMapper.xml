@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ischoolbar.programmer.jxc.mapper.InventoryMapper">
+
+
+	<resultMap type="com.ischoolbar.programmer.jxc.pojo.InventoryVo"
+		id="inventoryResultMap">
+		<!-- private Integer inventoryId; private Integer productId; private Integer 
+			inventoryNum; private Integer storeId; private String inventoryRemark; private 
+			String productName; private String cname; private String brandName; private 
+			String storeName; -->
+		<id column="inventory_id" property="inventoryId" />
+		<result column="product_id" property="productId" />
+		<result column="inventory_num" property="inventoryNum" />
+		<result column="store_id" property="storeId" />
+		<result column="store_name" property="storeName" />
+		<result column="product_name" property="productName" />
+		<result column="cname" property="cname" />
+		<result column="brand_name" property="brandName" />
+		<result column="inventory_remark" property="inventoryRemark" />
+	</resultMap>
+	<select id="selectByPage" resultMap="inventoryResultMap">
+		select i.inventory_id, p.product_id,p.product_name,c.cname,b.brand_id,b.brand_name,i.inventory_num,s.store_id,s.store_name
+		from inventory i
+		LEFT JOIN product p on i.product_id = p.product_id
+		left JOIN category c on p.cid = c.cid
+		left join brand b on p.brand_id = b.brand_id
+		left join store s on i.store_id = s.store_id
+		<where>
+			<if test="inv.brandId != null and inv.brandId != '' and inv.brandId != 1000">
+				and p.brand_id = ${inv.brandId}
+			</if>
+			<if test="inv.productName != null and inv.productName != ''">
+				and p.product_name like '%${inv.productName}%'
+			</if>
+		</where>
+		order by p.product_id asc
+	</select>
+
+</mapper>
