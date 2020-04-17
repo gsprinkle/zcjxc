@@ -42,7 +42,7 @@
 			<tr>
 				<td width="60" align="right">品牌:</td>
 				<td><input type="text" name="brandId" class="wu-text easyui-combobox"
-					data-options="required:true, missingMessage:'请填写产品名称',
+					data-options="required:true, missingMessage:'请选产品品牌',
 						url : '../brand/getBrandDropList',
 						valueField : 'brandId',textField : 'brandName'
 					" /></td>
@@ -52,6 +52,18 @@
 				<td width="60" align="right">产品名称:</td>
 				<td><input type="text" name="productName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写产品名称'" /></td>
+			</tr>
+			<!-- 不足提示 -->
+			<tr>
+				<td width="60" align="right">不足提示:</td>
+				<td><input type="text" name="remind" class="wu-text easyui-numberbox"
+					data-options="required:true, missingMessage:'库存低于该数值时提醒'" /></td>
+			</tr>
+			<!-- 排序 -->
+			<tr>
+				<td width="60" align="right">排序:</td>
+				<td><input type="text" name="orderId" class="wu-text easyui-numberbox"
+					data-options="required:true, missingMessage:'排序数值越小越靠前'" /></td>
 			</tr>
 
 			<!-- 备注 -->
@@ -97,7 +109,18 @@
 				<td><input type="text" id="edit-name" name="productName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写产品名称'" /></td>
 			</tr>
-
+			<!-- 不足提示 -->
+			<tr>
+				<td width="60" align="right">不足提示:</td>
+				<td><input type="text" id="edit-remind" name="remind" class="wu-text easyui-numberbox"
+					data-options="required:true, missingMessage:'库存低于该数值时提醒'" /></td>
+			</tr>
+			<!-- 排序 -->
+			<tr>
+				<td width="60" align="right">排序:</td>
+				<td><input type="text" name="orderId" id="edit-orderId" class="wu-text easyui-numberbox"
+					data-options="required:true, missingMessage:'排序数值越小越靠前'" /></td>
+			</tr>
 			<!-- 备注 -->
 			<tr>
 				<td align="right">备注:</td>
@@ -133,12 +156,12 @@
 			title : '产品名称',
 			width : 100,
 			sortable : true
-		},  {
+		}, {
 			field : 'cname',
 			title : '分类',
 			width : 100,
 			sortable : true,
-		},{
+		}, {
 			field : 'brandId',
 			title : '品牌ID',
 			width : 100,
@@ -155,6 +178,16 @@
 			width : 100,
 			sortable : true,
 			hidden : true
+		}, {
+			field : 'remind',
+			title : '不足提醒',
+			width : 100,
+			sortable : true
+		}, {
+			field : 'orderId',
+			title : '排序',
+			width : 100,
+			sortable : true
 		}, {
 			field : 'productRemark',
 			title : '备注',
@@ -182,12 +215,12 @@
 				top : e.pageY
 			});
 		},
-		onSelect : function(node){
+		onSelect : function(node) {
 			$('#data-datagrid').datagrid('reload', {
 				cid : $(this).tree('getSelected').id
 			});
 		}
-		
+
 	});
 
 	// 监听 品牌选择下拉框，当选择品牌时，根据品牌查询产品数据
@@ -200,15 +233,15 @@
 			onSelect : function() {
 				var node = $('#tt').tree('getSelected');
 				var cid;
-				if(node){
+				if (node) {
 					cid = node.id;
 				}
-				if(cid){
+				if (cid) {
 					$('#data-datagrid').datagrid('reload', {
 						brandId : $("#search-brandId").combobox('getValue'),
 						'cid' : cid
 					});
-				}else{
+				} else {
 					$('#data-datagrid').datagrid('reload', {
 						brandId : $("#search-brandId").combobox('getValue')
 					});
@@ -287,9 +320,9 @@
 	 */
 	function remove() {
 		var item = $('#data-datagrid').datagrid('getSelected');
-		if(!item){
+		if (!item) {
 			$.messager.alert('信息提示', '请选择要删除的数据！', 'info');
-			return ;
+			return;
 		}
 		$.messager.confirm('信息提示', '确定要删除该记录？', function(result) {
 			if (result) {
@@ -381,6 +414,8 @@
 				$("#edit-cid").combobox("setValue", item.cid);
 				$("#edit-name").val(item.productName);
 				$("#edit-remark").val(item.productRemark);
+				$("#edit-remind").numberbox('setValue',item.remind);
+				$("#edit-orderId").numberbox('setValue',item.orderId);
 			}
 		});
 	}

@@ -18,8 +18,10 @@ import lombok.Data;
 public class InventoryVo extends Inventory {
 	// i.inventory_id,c.cname,b.brand_name,i.inventory_num,s.store_name
 	private String productName;
+	private Integer remind;
 	private String cname;
 	private String brandName;
 	private String storeName;
 	private Integer brandId;
+	private boolean unenough;
 }

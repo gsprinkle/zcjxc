@@ -163,7 +163,16 @@ public class ProductController {
 		ret.put("type", "success");
 		ret.put("msg", "删除成功！");
 		return ret;
-
+	}
+	
+	/**
+	 * 获取产品下拉列表
+	 * @return
+	 */
+	@RequestMapping(value = "/getProductDropList")
+	@ResponseBody
+	public List<Product> getProductDropList(){
+		return productService.list();
 	}
 
 	/**
@@ -175,4 +184,6 @@ public class ProductController {
 	private boolean isExist(String productName) {
 		return productService.getOne(new QueryWrapper<Product>().eq("product_name", productName)) == null ? false : true;
 	}
+	
+	
 }

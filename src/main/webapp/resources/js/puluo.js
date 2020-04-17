@@ -11,3 +11,16 @@ function getCurDate() {
 	var curDate = new Date();
 	return myformatter(curDate);
 }
+
+/* 格式化日期为年月 */
+function formatterForMonth(date) {
+	var y = date.getFullYear();
+	var m = date.getMonth() + 1;
+	return y + '-' + (m < 10 ? ('0' + m) : m);
+}
+
+/* 获取当前年月 */
+function getYearMonth() {
+	var curDate = new Date();
+	return formatterForMonth(curDate);
+}

@@ -1,9 +1,12 @@
 package com.ischoolbar.programmer.jxc.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.sql.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,20 +24,27 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Sale implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "sale_id", type = IdType.AUTO)
-    private Integer saleId;
+	@TableId(value = "sale_id", type = IdType.AUTO)
+	private Integer saleId;
 
-    private Integer eid;
+	private Integer eid;
 
-    private Integer productId;
+	private Integer custId;
+	
+	private Integer productId;
 
-    private Integer salNum;
+	private Integer saleNum;
 
-    private LocalDate saleDate;
+	private Date saleDate;
 
-    private String saleRemark;
+	private String saleRemark;
 
+	// 查询字段，不映射数据库
+	@TableField(exist = false)
+	private Integer dateModel;
+	@TableField(exist = false)
+	private String date;
 
 }

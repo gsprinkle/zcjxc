@@ -25,6 +25,13 @@
             $(this).remove();
         });
     }
+    function reloadTabGrid(title){
+    	if($("#wu-tabs").tabs('exists',title)){
+    		$("#wu-tabs").tabs('select',title);
+    		window.top.reload_inventory.call();
+    		window.setTimeout("$('#wu-tabs').tabs('select','进货')",50);
+    	}
+    }
 </script>
 </head>
 <body class="easyui-layout">

@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zcburner.jxc.mapper.StockMapper">
+<mapper namespace="com.ischoolbar.programmer.jxc.mapper.StockMapper">
 
+	<resultMap type="com.ischoolbar.programmer.jxc.pojo.StockVo"
+		id="stockResultMap">
+		<id property="stockId" column="stock_id" />
+		<result property="stockDate" column="stock_date" />
+		<result property="productId" column="product_id" />
+		<result property="productName" column="product_name" />
+		<result property="stockNum" column="stock_num" />
+		<result property="stockRemark" column="stock_remark" />
+	</resultMap>
+
+	<select id="selectByPage" resultMap="stockResultMap">
+		select s.*,p.product_name from stock s
+		LEFT JOIN product p on
+		s.product_id = p.product_id
+		<where>
+			<if test="stock.date != null and stock.date != ''">
+				<if test="stock.dateModel == 1">
+					and DATE_FORMAT(stock_date,'%Y-%m-%d') = '${stock.date}'
+				</if>
+				<if test="stock.dateModel == 2">
+					and DATE_FORMAT(stock_date,'%Y-%m') = '${stock.date}'
+				</if>
+				<if test="stock.dateModel == 3">
+					and DATE_FORMAT(stock_date,'%Y') = '${stock.date}'
+				</if>
+			</if>
+		</where>
+	</select>
 </mapper>

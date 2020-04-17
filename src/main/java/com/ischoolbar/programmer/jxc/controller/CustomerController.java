@@ -1,11 +1,8 @@
 package com.ischoolbar.programmer.jxc.controller;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -127,6 +124,12 @@ public class CustomerController {
 		ret.put("msg", "删除成功！");
 		return ret;
 
+	}
+	
+	@RequestMapping(value="/getCustomerDropList")
+	@ResponseBody
+	public List<Customer> getCustomerDropList(){
+		return custService.list();
 	}
 
 	/**

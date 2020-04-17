@@ -37,6 +37,10 @@ public class InventoryController {
 	@Autowired
 	IProductService productService;
 
+	/**
+	 * 初始化库存列表
+	 * @return
+	 */
 	@RequestMapping("/initialize")
 	@ResponseBody
 	public Map<String, Object> initialize() {
@@ -65,7 +69,6 @@ public class InventoryController {
 
 	/**
 	 * 列表页面
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -74,6 +77,17 @@ public class InventoryController {
 		model.setViewName("/jxc/inventory/list");
 		return model;
 	}
+	/**
+	 * 库存管理使用说明页面
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/summary", method = RequestMethod.GET)
+	public ModelAndView summary(ModelAndView model) {
+		model.setViewName("/jxc/inventory/summary");
+		return model;
+	}
+
 
 	/**
 	 * 分页级联查询列表

@@ -29,5 +29,6 @@
 				and p.cid in (${product.cids})
 			</if>
 		</where>
+		order by order_id asc
 	</select>
 </mapper>

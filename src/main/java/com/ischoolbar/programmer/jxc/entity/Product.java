@@ -40,6 +40,8 @@ public class Product implements Serializable {
 
     private String productRemark;
     
+    private Integer remind; //不足提醒
+    
     @TableField(exist=false)
     private String cids;
 

@@ -1,6 +1,7 @@
 package com.ischoolbar.programmer.jxc.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -119,6 +120,16 @@ public class EmployeeController {
 		ret.put("msg", "删除成功！");
 		return ret;
 
+	}
+	
+	/**
+	 * 获取员工下拉列表
+	 * @return
+	 */
+	@RequestMapping(value="getEmployeeDropList")
+	@ResponseBody
+	public List<Employee> getEmployeeDropList(){
+		return empService.list(new QueryWrapper<Employee>().orderByAsc("eorder"));
 	}
 
 	/**

@@ -11,6 +11,7 @@
 			String storeName; -->
 		<id column="inventory_id" property="inventoryId" />
 		<result column="product_id" property="productId" />
+		<result column="remind" property="remind" />
 		<result column="inventory_num" property="inventoryNum" />
 		<result column="store_id" property="storeId" />
 		<result column="store_name" property="storeName" />
@@ -20,7 +21,7 @@
 		<result column="inventory_remark" property="inventoryRemark" />
 	</resultMap>
 	<select id="selectByPage" resultMap="inventoryResultMap">
-		select i.inventory_id, p.product_id,p.product_name,c.cname,b.brand_id,b.brand_name,i.inventory_num,s.store_id,s.store_name
+		select i.inventory_id, p.remind,p.product_id,p.product_name,c.cname,b.brand_id,b.brand_name,i.inventory_num,s.store_id,s.store_name
 		from inventory i
 		LEFT JOIN product p on i.product_id = p.product_id
 		left JOIN category c on p.cid = c.cid
@@ -32,6 +33,9 @@
 			</if>
 			<if test="inv.productName != null and inv.productName != ''">
 				and p.product_name like '%${inv.productName}%'
+			</if>
+			<if test="inv.unenough">
+				and i.inventory_num <![CDATA[<=]]> p.remind
 			</if>
 		</where>
 		order by p.product_id asc

@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zcburner.jxc.mapper.SaleMapper">
-
+<mapper namespace="com.ischoolbar.programmer.jxc.mapper.SaleMapper">
+	<resultMap type="com.ischoolbar.programmer.jxc.pojo.SaleVo"	id="saleResultMap">
+		<id property="saleId" column="sale_id" />
+		<result property="saleDate" column="sale_date" />
+		<result property="productId" column="product_id" />
+		<result property="productName" column="product_name" />
+		<result property="saleNum" column="sale_num" />
+		<result property="eid" column="eid" />
+		<result property="ename" column="ename" />
+		<result property="custId" column="cust_id" />
+		<result property="custName" column="cust_name" />
+		<result property="saleRemark" column="sale_remark" />
+	</resultMap>
+	
+	<select id="selectByPage" resultMap="saleResultMap">
+		select s.*,e.ename,p.product_name,c.cust_name from sale s
+		left JOIN employee e on s.eid = e.eid 
+		left JOIN product p on s.product_id = p.product_id
+		left join customer c on s.cust_id = c.cust_id
+		<where>
+			<if test="sale.date != null and sale.date != ''">
+				<if test="sale.dateModel == 1">
+					and DATE_FORMAT(sale_date,'%Y-%m-%d') = '${sale.date}'
+				</if>
+				<if test="sale.dateModel == 2">
+					and DATE_FORMAT(sale_date,'%Y-%m') = '${sale.date}'
+				</if>
+				<if test="sale.dateModel == 3">
+					and DATE_FORMAT(sale_date,'%Y') = '${sale.date}'
+				</if>
+			</if>
+		</where>
+	</select>
 </mapper>

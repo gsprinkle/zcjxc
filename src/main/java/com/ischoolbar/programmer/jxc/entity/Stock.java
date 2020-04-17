@@ -1,6 +1,7 @@
 package com.ischoolbar.programmer.jxc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.sql.Date;
@@ -36,6 +37,10 @@ public class Stock implements Serializable {
     private Integer stockNum;
 
     private String stockRemark;
-
-
+    
+    // 查询字段，不映射数据库
+    @TableField(exist=false)
+    private Integer dateModel;
+    @TableField(exist=false)
+    private String date;
 }

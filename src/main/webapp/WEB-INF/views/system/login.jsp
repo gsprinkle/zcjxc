@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>普罗门诊部请领系统</title>
+  <title>【中诚燃烧】库存管理系统</title>
   <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
   <meta name="author" content="Vincent Garreau">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -20,14 +20,14 @@
 			<div class="login-center clearfix">
 				<div class="login-center-img"><img src="../resources/admin/login/images/name.png"></div>
 				<div class="login-center-input">
-					<input type="text" name="username" id="username" value="admin" placeholder="请输入您的用户名" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的用户名&#39;">
+					<input type="text" name="username" id="username" value="zcburner" placeholder="请输入您的用户名" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的用户名&#39;">
 					<div class="login-center-input-text">用户名</div>
 				</div>
 			</div>
 			<div class="login-center clearfix">
 				<div class="login-center-img"><img src="../resources/admin/login/images/password.png"></div>
 				<div class="login-center-input">
-					<input type="password" name="password" id="password" value="admin" placeholder="请输入您的密码" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的密码&#39;">
+					<input type="password" name="password" id="password" placeholder="请输入您的密码" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的密码&#39;">
 					<div class="login-center-input-text">密码</div>
 				</div>
 			</div>
