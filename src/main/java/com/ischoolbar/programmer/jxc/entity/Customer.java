@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Customer implements Serializable {
+public class Customer extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,7 @@ public class Customer implements Serializable {
     private String custRemark;
 
     private Date createTime;
+    
 
 
 }

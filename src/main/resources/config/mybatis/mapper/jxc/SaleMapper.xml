@@ -11,6 +11,7 @@
 		<result property="ename" column="ename" />
 		<result property="custId" column="cust_id" />
 		<result property="custName" column="cust_name" />
+		<result property="username" column="username" />
 		<result property="saleRemark" column="sale_remark" />
 	</resultMap>
 	

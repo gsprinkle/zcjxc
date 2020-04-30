@@ -100,9 +100,10 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '添加成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#add-dialog').dialog('close');
 					$('#data-datagrid').datagrid('reload');
+					closeBrandTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -127,9 +128,10 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '修改成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#edit-dialog').dialog('close');
 					$('#data-datagrid').datagrid('reload');
+					closeBrandTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -153,8 +155,9 @@
 					},
 					success : function(data) {
 						if (data.type == 'success') {
-							$.messager.alert('信息提示', '删除成功！', 'info');
+							$.messager.alert('信息提示', data.msg, 'info');
 							$('#data-datagrid').datagrid('reload');
+							closeBrandTab();
 						} else {
 							$.messager.alert('信息提示', data.msg, 'warning');
 						}
@@ -258,4 +261,8 @@
 			$('#data-datagrid').datagrid('unselectAll');
 		}
 	});
+	
+	function closeBrandTab(){
+		closeTab('产品管理');
+	}
 </script>

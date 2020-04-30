@@ -47,11 +47,21 @@
 						valueField : 'brandId',textField : 'brandName'
 					" /></td>
 			</tr>
+			
 			<!-- 产品名称 -->
 			<tr>
 				<td width="60" align="right">产品名称:</td>
 				<td><input type="text" name="productName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写产品名称'" /></td>
+			</tr>
+			<!-- 所在仓库 -->
+			<tr>
+				<td width="60" align="right">所在仓库:</td>
+				<td><input type="text" name="storeId" class="wu-text easyui-combobox"
+					data-options="required:true, missingMessage:'请选产品品牌',
+						url : '../store/getStoreDropList',
+						valueField : 'storeId',textField : 'storeName'
+					" /></td>
 			</tr>
 			<!-- 不足提示 -->
 			<tr>
@@ -108,6 +118,15 @@
 				<td width="60" align="right">产品名称:</td>
 				<td><input type="text" id="edit-name" name="productName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写产品名称'" /></td>
+			</tr>
+			<!-- 所在仓库 -->
+			<tr>
+				<td width="60" align="right">所在仓库:</td>
+				<td><input type="text" id="edit-storeId" name="storeId" class="wu-text easyui-combobox"
+					data-options="required:true, missingMessage:'请选产品品牌',
+						url : '../store/getStoreDropList',
+						valueField : 'storeId',textField : 'storeName'
+					" /></td>
 			</tr>
 			<!-- 不足提示 -->
 			<tr>
@@ -178,6 +197,16 @@
 			width : 100,
 			sortable : true,
 			hidden : true
+		},{
+			field : 'storeId',
+			title : '所在仓库',
+			width : 100,
+			sortable : true,
+			formatter : function(val,row){
+				if(val){
+					return row.storeName;
+				}
+			}
 		}, {
 			field : 'remind',
 			title : '不足提醒',
@@ -277,9 +306,10 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '添加成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#add-dialog').dialog('close');
 					$('#data-datagrid').datagrid('reload');
+					closeProductTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -305,9 +335,10 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '修改成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#edit-dialog').dialog('close');
 					$('#data-datagrid').datagrid('reload');
+					closeProductTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -336,8 +367,9 @@
 					},
 					success : function(data) {
 						if (data.type == 'success') {
-							$.messager.alert('信息提示', '删除成功！', 'info');
+							$.messager.alert('信息提示', data.msg, 'info');
 							$('#data-datagrid').datagrid('reload');
+							closeProductTab();
 						} else {
 							$.messager.alert('信息提示', data.msg, 'warning');
 						}
@@ -412,11 +444,17 @@
 				$("#edit-id").val(item.productId);
 				$("#edit-brand").combobox("setValue", item.brandId);
 				$("#edit-cid").combobox("setValue", item.cid);
+				$("#edit-storeId").combobox("setValue", item.storeId);
 				$("#edit-name").val(item.productName);
 				$("#edit-remark").val(item.productRemark);
 				$("#edit-remind").numberbox('setValue',item.remind);
 				$("#edit-orderId").numberbox('setValue',item.orderId);
 			}
 		});
+	}
+	function closeProductTab(){
+		closeTab('进货');
+		closeTab('销售');
+		closeTab('库存');
 	}
 </script>

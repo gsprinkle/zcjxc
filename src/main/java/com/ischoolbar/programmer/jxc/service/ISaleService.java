@@ -5,6 +5,8 @@ import com.ischoolbar.programmer.jxc.pojo.SaleVo;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,9 +20,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISaleService extends IService<Sale> {
 
-	Map<String, Object> addOrUpdate(Sale sale);
+	Map<String, Object> addOrUpdate(Sale sale,HttpServletRequest request);
 
-	Map<String, Object> delete(Integer saleId);
+	Map<String, Object> delete(Integer saleId,HttpServletRequest request);
 
 	Page<SaleVo> selectByPage(Page<SaleVo> page, Sale sale);
 

@@ -1,10 +1,11 @@
 package com.ischoolbar.programmer.jxc.entity;
 
+import java.io.Serializable;
+import java.sql.Date;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.sql.Date;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Stock implements Serializable {
+public class Stock extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,8 +30,6 @@ public class Stock implements Serializable {
     private Integer stockId;
 
     private Date stockDate;
-
-    private Integer eid;
 
     private Integer productId;
 

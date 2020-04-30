@@ -22,6 +22,7 @@ public class InventoryVo extends Inventory {
 	private String cname;
 	private String brandName;
 	private String storeName;
+	private Integer storeId;
 	private Integer brandId;
 	private boolean unenough;
 }

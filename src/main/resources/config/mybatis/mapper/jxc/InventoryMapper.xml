@@ -21,24 +21,44 @@
 		<result column="inventory_remark" property="inventoryRemark" />
 	</resultMap>
 	<select id="selectByPage" resultMap="inventoryResultMap">
-		select i.inventory_id, p.remind,p.product_id,p.product_name,c.cname,b.brand_id,b.brand_name,i.inventory_num,s.store_id,s.store_name
+		select i.*,
+		p.remind,p.product_name,c.cname,b.brand_id,b.brand_name,s.store_id,s.store_name
 		from inventory i
 		LEFT JOIN product p on i.product_id = p.product_id
 		left JOIN category c on p.cid = c.cid
-		left join brand b on p.brand_id = b.brand_id
-		left join store s on i.store_id = s.store_id
+		left join brand b on p.brand_id =
+		b.brand_id
+		left join store s on p.store_id = s.store_id
 		<where>
-			<if test="inv.brandId != null and inv.brandId != '' and inv.brandId != 1000">
+			<if
+				test="inv.brandId != null and inv.brandId != '' and inv.brandId != 1000">
 				and p.brand_id = ${inv.brandId}
 			</if>
 			<if test="inv.productName != null and inv.productName != ''">
 				and p.product_name like '%${inv.productName}%'
 			</if>
 			<if test="inv.unenough">
-				and i.inventory_num <![CDATA[<=]]> p.remind
+				and i.inventory_num <![CDATA[<=]]>
+				p.remind
 			</if>
 		</where>
-		order by p.product_id asc
+		order by p.cid asc ,b.brand_id,p.order_id asc
 	</select>
+
+	<!-- 初始化库存列表 -->
+	<select id="truncate">
+		truncate table inventory;
+	</select>
+	<select id="initList" resultType="com.ischoolbar.programmer.jxc.entity.Inventory">
+		select
+		p.product_id,p.product_name,
+		(IFNULL(SUM(s.stock_num),0)-IFNULL(SUM(sale_num),0)) inventory_num
+		from product p
+		left JOIN stock s on s.product_id = p.product_id
+		left join sale ON p.product_id = sale.product_id
+		group BY p.product_id,p.product_name
+
+	</select>
+
 
 </mapper>

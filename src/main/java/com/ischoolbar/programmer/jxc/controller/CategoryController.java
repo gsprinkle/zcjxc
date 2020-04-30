@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -94,28 +95,8 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> add(Category category) {
-		boolean hasId = category.getCid() == null ? false : true;
-		Map<String, Object> ret = new HashMap<>();
-		if (StringUtils.isEmpty(category.getCname())) {
-			ret.put("type", "error");
-			ret.put("msg", "用户名不能为空");
-			return ret;
-		}
-		if (!hasId && isExist(category.getCname())) {
-			ret.put("type", "error");
-			ret.put("msg", "该分类已经存在，请重新输入！");
-			return ret;
-		}
-		if (!categoryService.saveOrUpdate(category)) {
-			ret.put("type", "error");
-			ret.put("msg", "新增分类异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", hasId ? "分类修改成功！" : "分类添加成功！");
-		return ret;
-
+	public Map<String, Object> addOrUpdate(Category category,HttpServletRequest request) {
+		return categoryService.addOrUpdate(category,request);
 	}
 
 	/**
@@ -126,20 +107,8 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer cid) {
-		Map<String, Object> ret = new HashMap<>();
-
-		// 递归删除子节点		
-		int removes = categoryService.removes(cid);
-		if(removes <= 0){
-			ret.put("type", "error");
-			ret.put("msg", "删除异常！");
-			return ret;
-		}
-			
-		ret.put("type", "success");
-		ret.put("msg", "删除成功！共删除 " + removes + " 条数据");
-		return ret;
+	public Map<String, Object> delete(Integer cid, HttpServletRequest request) {
+		return categoryService.delete(cid, request);
 
 	}
 	

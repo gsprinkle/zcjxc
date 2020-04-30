@@ -11,12 +11,12 @@
 			<!-- <label>产品名称:</label><input id="search-name" onkeyup="changeName()" class="wu-text" style="width: 100px"> -->
 			<!-- <a href="#" id="search-btn"	class="easyui-linkbutton" iconCls="icon-search">搜索</a> -->
 			<!-- 日期模式 -->
-			<label>日期模式:<input type="radio" name="dateRadio" value="1">日</label> 
-			<label><input type="radio" checked="checked" name="dateRadio" value="2">月</label> 
-			<label style="margin-right:30px;"><input type="radio" name="dateRadio" value="3">年</label>
+			<label>日期模式:<input type="radio" name="dateRadio" value="1">日
+			</label> <label><input type="radio" checked="checked" name="dateRadio" value="2">月</label> <label
+				style="margin-right: 30px;"><input type="radio" name="dateRadio" value="3">年</label>
 			<!-- 选择日期 -->
-			<label>选择日期:</label><input id="search-date" type="text" /> 
-			
+			<label>选择日期:</label><input id="search-date" type="text" />
+
 			<!-- 日期模式 默认为月 -->
 			<input type="hidden" id="dateModel" value="2" />
 			<!-- 日期参数 -->
@@ -25,10 +25,8 @@
 	</div>
 	<!-- End of toolbar -->
 
-	<!-- 产品 -->
-	<div data-options="region:'center',title:'产品',split:true">
+	<!-- 进货-->
 		<table name="stock-datagrid" id="data-datagrid" class="easyui-datagrid" toolbar="#wu-toolbar"></table>
-	</div>
 </div>
 <style>
 .selected {
@@ -40,18 +38,10 @@
 	style="width: 450px; padding: 10px;">
 	<form id="add-form" method="post">
 		<table>
-<!--   
-    private Date stockDate;
-    private Integer productId;
-    private Integer stockNum;
-    private String stockRemark; 
--->
 			<!--  日期  -->
 			<tr>
 				<td width="60" align="right">日期:</td>
-				<td>
-					<input type="text" name="stockDate" class="easyui-datebox" 
-					data-options=" value : myformatter(new Date())"/>
+				<td><input type="text" name="stockDate" class="easyui-datebox" data-options=" value : myformatter(new Date())" />
 				</td>
 			</tr>
 			<!-- 产品 -->
@@ -77,6 +67,40 @@
 		</table>
 	</form>
 </div>
+<!-- 修改窗口 -->
+<div id="edit-dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'"
+	style="width: 450px; padding: 10px;">
+	<form id="edit-form" method="post">
+		<table>
+			<input type="hidden" id="edit-id" name="stockId" />
+			<!--  日期  -->
+			<tr>
+				<td width="60" align="right">日期:</td>
+				<td><input type="text" id="edit-date" name="stockDate" class="easyui-datebox" /></td>
+			</tr>
+			<!-- 产品 -->
+			<tr>
+				<td width="60" align="right">产品:</td>
+				<td><input type="text" id="edit-productId" name="productId" class="easyui-combobox"
+					data-options="required:true, missingMessage:'请选产品',
+						url : '../product/getProductDropList',
+						valueField : 'productId',textField : 'productName'
+					" /></td>
+			</tr>
+			<!-- 进货数量 -->
+			<tr>
+				<td width="60" align="right">进货数量:</td>
+				<td><input type="text" id="edit-stockNum" name="stockNum" class="easyui-numberbox"
+					data-options="required:true, missingMessage:'请填写进货数量'" /></td>
+			</tr>
+			<!-- 备注 -->
+			<tr>
+				<td align="right">备注:</td>
+				<td><textarea id="edit-remark" name="stockRemark" rows="6" class="wu-textarea" style="width: 260px"></textarea></td>
+			</tr>
+		</table>
+	</form>
+</div>
 
 <%@include file="../../common/footer.jsp"%>
 
@@ -93,7 +117,7 @@
 					// 重新加载数据
 					var dateModel = $("#dateModel").val();
 					var date = $("#date").val();
-					loadData(dateModel,date);
+					loadData(dateModel, date);
 				},
 				formatter : function(date) {
 					var y = date.getFullYear();
@@ -152,11 +176,11 @@
 			$("#date").val(curDate.getFullYear());
 		}
 		var date = $("#date").val();
-		loadData(dateModel,date); 
+		loadData(dateModel, date);
 	});
 	// 选择列表模式 加载数据方法
 	function loadData(dateModel, date) {
-		$('#data-datagrid').datagrid('load', {			
+		$('#data-datagrid').datagrid('load', {
 			'dateModel' : dateModel,
 			'date' : date
 		});
@@ -186,9 +210,38 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '添加成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#add-dialog').dialog('close');
 					$('#data-datagrid').datagrid('reload');
+					closeStockTab();
+				} else {
+					$.messager.alert('信息提示', data.msg, 'warning');
+				}
+			}
+		});
+	}
+
+	/**
+	 *  修改记录
+	 */
+	function edit() {
+		var validate = $("#edit-form").form("validate");
+		if (!validate) {
+			$.messager.alert("消息提醒", "请检查你输入的数据!", "warning");
+			return;
+		}
+		var data = $("#edit-form").serialize();
+		$.ajax({
+			url : '../stock/saveOrUpdate',
+			dataType : 'json',
+			type : 'post',
+			data : data,
+			success : function(data) {
+				if (data.type == 'success') {
+					$.messager.alert('信息提示', data.msg, 'info');
+					$('#edit-dialog').dialog('close');
+					$('#data-datagrid').datagrid('reload');
+					closeStockTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -217,8 +270,9 @@
 					},
 					success : function(data) {
 						if (data.type == 'success') {
-							$.messager.alert('信息提示', '删除成功！', 'info');
+							$.messager.alert('信息提示', data.msg, 'info');
 							$('#data-datagrid').datagrid('reload');
+							closeStockTab();
 						} else {
 							$.messager.alert('信息提示', data.msg, 'warning');
 						}
@@ -244,11 +298,49 @@
 				text : '取消',
 				iconCls : 'icon-cancel',
 				handler : function() {
-					parent.$("#wu-tabs").tabs('close','库存盘点');
 					$('#add-dialog').dialog('close');
+					closeStockTab();
 				}
 			} ]
 		});
+	}
+	/**
+	 * Name 打开修改窗口
+	 */
+	function openEdit() {
+		var item = $('#data-datagrid').datagrid('getSelected');
+		if (item == null || item.length == 0) {
+			$.messager.alert('信息提示', '请选择要修改的数据！', 'info');
+			return;
+		}
+		$('#edit-dialog').dialog(
+				{
+					closed : false,
+					modal : true,
+					title : "添加信息",
+					buttons : [ {
+						text : '确定',
+						iconCls : 'icon-ok',
+						handler : edit
+					}, {
+						text : '取消',
+						iconCls : 'icon-cancel',
+						handler : function() {
+							parent.$("#wu-tabs").tabs('close', '库存');
+							$('#edit-dialog').dialog('close');
+						}
+					} ],
+					onBeforeOpen : function() {
+						$("#edit-id").val(item.stockId);
+						$("#edit-date").datebox('setValue',
+								myformatter(new Date(item.stockDate)));
+						$("#edit-productId").combobox('setValue',
+								item.productId);
+						$("#edit-stockNum")
+								.numberbox('setValue', item.stockNum);
+						$("#edit-remark").val(item.stockRemark);
+					}
+				});
 	}
 
 	/** 
@@ -258,7 +350,7 @@
 		url : 'list',
 		rownumbers : true,
 		singleSelect : true,
-		pageList : [20,40,60,80,100],
+		pageList : [ 20, 40, 60, 80, 100 ],
 		pageSize : 100,
 		pagination : true,
 		multiSort : true,
@@ -277,97 +369,39 @@
 			title : '进货日期',
 			width : 100,
 			sortable : true,
-			formatter : function(value){
+			formatter : function(value) {
 				return myformatter(new Date(value));
 			}
-		},  {
+		}, {
 			field : 'productId',
 			title : '产品',
 			width : 100,
 			sortable : true,
-			formatter : function(value,row){
+			formatter : function(value, row) {
 				return row.productName;
 			}
 		}, {
 			field : 'stockNum',
 			title : '数量',
 			width : 100,
-			sortable : true,
-			editor : 'text'
+			sortable : true
 		}, {
 			field : 'stockRemark',
 			title : '备注',
 			width : 100,
 			sortable : true
-		}, ] ],
+		},{
+			field : 'username',
+			title : '创建者',
+			width : 100,
+			sortable : true
+		},  ] ],
 		onLoadSuccess : function(data) {
 			$('#data-datagrid').datagrid('unselectAll');
-		},
-		onDblClickRow : onDblClickRow,
-		onClickRow :onClickRow
+		}
 	});
-	// 编辑行 索引
-	var editIndex = undefined;
-	// 结束行编辑
-	function endEditing() {
-		if (editIndex == undefined) {
-			return true;
-		}
-		// 获取选择的值
-		var stockId = $("#data-datagrid").datagrid('getData').rows[editIndex].stockId;
-		var productId = $("#data-datagrid").datagrid('getData').rows[editIndex].productId;
-		
-		var eNum = $("#data-datagrid").datagrid('getEditor', {
-			index : editIndex,
-			field : 'stockNum'
-		});
-		var stockNum = $(eNum.target).val();
-		$.ajax({
-			url : 'saveOrUpdate',
-			dataType : 'json',
-			data : {
-				'stockId' : stockId,
-				'stockNum' : stockNum,
-				'productId' : productId
-			},
-			success : function() {
-				$("#data-datagrid").datagrid('endEdit', editIndex);
-				$("#data-datagrid").datagrid('reload');
-				editIndex = undefined;
-				// 刷新库存列表
-				setTimeout("parent.reloadTabGrid('库存盘点')",50);
-			}
-		});
 
+	function closeStockTab() {
+		closeTab('库存');
 	}
-	// 双击开启行编辑
-	function onDblClickRow(index) {
-		if (editIndex != index) {
-			if (endEditing()) {
-				$("#data-datagrid").datagrid('beginEdit', index);
-				editIndex = index;
-			} else {
-				$('#data-datagrid').datagrid('selectRow', editIndex);
-			}
-		}
-	}
-	// 单击其它的行，结束编辑
-	function onClickRow() {
-		endEditing();
-	}
-	// 编辑好之后保存
-	function save(){
-		endEditing();
-	}
-	// 编辑完之后，取消保存
-	function cancel(){
-		if (editIndex == undefined) {
-			return;
-		}else{
-			editIndex = undefined;
-			$("#data-datagrid").datagrid('endEdit', editIndex);
-			$("#data-datagrid").datagrid('reload');
-		}
-	}
-	
 </script>

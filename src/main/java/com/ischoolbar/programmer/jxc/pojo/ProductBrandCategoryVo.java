@@ -23,4 +23,6 @@ public class ProductBrandCategoryVo extends Product {/**
 	
 	private String cname; // 分类名称
 	
+	private String storeName;// 所在仓库
+	
 }

@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,8 @@ import com.ischoolbar.programmer.jxc.service.IBrandService;
 public class BrandController {
 	@Autowired
 	IBrandService brandService;
+	
+	
 	
 	private static final Integer ALL_BRAND_ID = 1000;
 
@@ -75,27 +78,8 @@ public class BrandController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Brand brand) {
-		boolean hasId = brand.getBrandId() == null ? false : true;
-		Map<String, Object> ret = new HashMap<>();
-		if (StringUtils.isEmpty(brand.getBrandName())) {
-			ret.put("type", "error");
-			ret.put("msg", "品牌名不能为空");
-			return ret;
-		}
-		if (!hasId && isExist(brand.getBrandName())) {
-			ret.put("type", "error");
-			ret.put("msg", "该品牌已经存在，请重新输入！");
-			return ret;
-		}
-		if (!brandService.saveOrUpdate(brand)) {
-			ret.put("type", "error");
-			ret.put("msg", "新增品牌异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", hasId ? "品牌修改成功！" : "品牌添加成功！");
-		return ret;
+	public Map<String, Object> addOrUpdate(Brand brand,HttpServletRequest request) {
+		return brandService.addOrUpdate(brand,request);
 
 	}
 
@@ -110,17 +94,8 @@ public class BrandController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer brandId) {
-		Map<String, Object> ret = new HashMap<>();
-
-		if (!brandService.removeById(brandId)) {
-			ret.put("type", "error");
-			ret.put("msg", "删除品牌异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", "删除成功！");
-		return ret;
+	public Map<String, Object> delete(Integer brandId,HttpServletRequest request) {
+		return brandService.delete(brandId,request);
 	}
 	@RequestMapping("/getBrandDropList")
 	@ResponseBody
@@ -134,13 +109,5 @@ public class BrandController {
 		return brandList;
 	}
 
-	/**
-	 * 判断该品牌名称是否在数据库中已存在
-	 * 
-	 * @param cName
-	 * @return
-	 */
-	private boolean isExist(String brandName) {
-		return brandService.getOne(new QueryWrapper<Brand>().eq("brand_name", brandName)) == null ? false : true;
-	}
+	
 }

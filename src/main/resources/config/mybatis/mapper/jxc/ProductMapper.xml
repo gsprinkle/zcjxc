@@ -9,15 +9,17 @@
 		<result column="cid" property="cid" />
 		<result column="product_price" property="productPrice" />
 		<result column="order_id" property="orderId" />
+		<result column="store_id" property="storeId" />
 		<result column="state" property="state" />
 		<result column="product_remark" property="productRemark" />
 		<result column="brand_name" property="brandName" />
 		<result column="cname" property="cname" />
 	</resultMap>
 	<select id="selectPageVo" resultMap="productResultMap" parameterType="com.ischoolbar.programmer.jxc.entity.Product">
-		select p.*,b.brand_name,c.cname from product p
+		select p.*,b.brand_name,c.cname,s.store_name from product p
 		left join brand b on p.brand_id =b.brand_id
 		left join category c on p.cid = c.cid
+		left join store s on s.store_id = p.store_id
 		<where>
 			<if test="product.productName != null">
 				and p.product_name like '%${product.productName}%'

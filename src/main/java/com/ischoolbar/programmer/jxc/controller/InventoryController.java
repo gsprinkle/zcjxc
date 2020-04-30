@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,28 +45,8 @@ public class InventoryController {
 	 */
 	@RequestMapping("/initialize")
 	@ResponseBody
-	public Map<String, Object> initialize() {
-		Map<String, Object> ret = new HashMap<>();
-		Integer num = 0;
-		// 查询所有商品
-		List<Product> pList = productService.list();
-		// 商品库存默认为0
-		for (Product p : pList) {
-			// 该产品是否已存在
-			boolean exist = isExist(p.getProductId());
-			if(exist){
-				continue;
-			}
-			// 仓库默认为1号库,公司负一层仓库
-			Inventory inv = new Inventory();
-			inv.setProductId(p.getProductId());
-			inv.setInventoryNum(0);
-			inv.setStoreId(1);
-			inventoryService.saveOrUpdate(inv);
-		}
-		ret.put("type", "success");
-		ret.put("info", "初始化成功");
-		return ret;
+	public Map<String, Object> initialize(HttpServletRequest request) {
+		return inventoryService.initList(request);
 	}
 
 	/**

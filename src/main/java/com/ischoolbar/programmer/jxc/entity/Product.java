@@ -37,6 +37,8 @@ public class Product implements Serializable {
     private Integer orderId;
 
     private Integer state;
+    
+    private Integer storeId;// 所在仓库
 
     private String productRemark;
     

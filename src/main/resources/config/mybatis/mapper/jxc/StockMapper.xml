@@ -9,6 +9,7 @@
 		<result property="productId" column="product_id" />
 		<result property="productName" column="product_name" />
 		<result property="stockNum" column="stock_num" />
+		<result property="username" column="username" />
 		<result property="stockRemark" column="stock_remark" />
 	</resultMap>
 

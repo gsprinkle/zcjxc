@@ -1,5 +1,9 @@
 package com.ischoolbar.programmer.jxc.service;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ischoolbar.programmer.jxc.entity.Brand;
@@ -17,5 +21,7 @@ import com.ischoolbar.programmer.jxc.pojo.InventoryVo;
 public interface IInventoryService extends IService<Inventory> {
 
 	Page<InventoryVo> selectByPage(Page<InventoryVo> page, Inventory inventory);
+
+	Map<String, Object> initList(HttpServletRequest request);
 
 }

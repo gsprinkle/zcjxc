@@ -170,10 +170,11 @@ public class SystemController {
 			menuIds = menuIds.substring(0, menuIds.length() - 1);
 		}
 		List<Menu> userMenus = menuService.findListByIds(menuIds);
-		// 把角色信息、菜单信息放到session中
+		// 把角色信息、菜单信息、用户信息放到session中
 		request.getSession().setAttribute("admin", findByUsername);
 		request.getSession().setAttribute("role", role);
 		request.getSession().setAttribute("userMenus", userMenus);
+		request.getSession().setAttribute("user", user);
 		ret.put("type", "success");
 		ret.put("msg", "登录成功！");
 		logService.add("用户名为{" + user.getUsername() + "}，角色为{" + role.getName() + "}的用户登录成功!");

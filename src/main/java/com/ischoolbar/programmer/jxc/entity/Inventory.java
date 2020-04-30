@@ -29,8 +29,6 @@ public class Inventory implements Serializable {
     private Integer productId;
 
     private Integer inventoryNum;
-    
-    private Integer storeId;// 所在仓库
 
     private String inventoryRemark;
     

@@ -4,6 +4,8 @@ package com.ischoolbar.programmer.jxc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,8 +77,8 @@ public class StockController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Stock stock) {
-		return stockService.addOrUpdate(stock);
+	public Map<String, Object> addOrUpdate(Stock stock, HttpServletRequest request) {
+		return stockService.addOrUpdate(stock,request);
 	}
 	/**
 	 * 删除
@@ -85,8 +87,8 @@ public class StockController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer stockId) {
+	public Map<String, Object> delete(Integer stockId, HttpServletRequest request) {
 		
-		return stockService.delete(stockId);
+		return stockService.delete(stockId,request);
 	}
 }

@@ -4,6 +4,8 @@ package com.ischoolbar.programmer.jxc.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,11 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ischoolbar.programmer.jxc.entity.Sale;
-import com.ischoolbar.programmer.jxc.entity.Stock;
 import com.ischoolbar.programmer.jxc.pojo.SaleVo;
-import com.ischoolbar.programmer.jxc.pojo.StockVo;
 import com.ischoolbar.programmer.jxc.service.ISaleService;
-import com.ischoolbar.programmer.jxc.service.IStockService;
 
 /**
  * <p>
@@ -77,8 +76,8 @@ public class SaleController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Sale sale) {
-		return saleService.addOrUpdate(sale);
+	public Map<String, Object> addOrUpdate(Sale sale,HttpServletRequest request) {
+		return saleService.addOrUpdate(sale,request);
 	}
 	/**
 	 * 删除
@@ -87,8 +86,8 @@ public class SaleController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer saleId) {
+	public Map<String, Object> delete(Integer saleId,HttpServletRequest request) {
 		
-		return saleService.delete(saleId);
+		return saleService.delete(saleId,request);
 	}
 }

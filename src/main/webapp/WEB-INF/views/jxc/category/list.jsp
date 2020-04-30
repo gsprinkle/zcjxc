@@ -20,7 +20,7 @@
 </div>
 <div id="mm" class="easyui-menu" style="width:120px;">
 		<div onclick="openAdd()" data-options="iconCls:'icon-add'">添加</div>
-		<!-- <div onclick="openEdit()" data-options="iconCls:'icon-edit'">修改</div> -->
+		<div onclick="openEdit()" data-options="iconCls:'icon-edit'">修改</div>
 		<div onclick="remove()" data-options="iconCls:'icon-remove'">删除</div>
 </div>
 <style>
@@ -39,6 +39,20 @@
 					data-options="required:true, missingMessage:'请填写分类名称'" /></td>
 			</tr>
 			<input type="hidden" name="pid" id="add-pid" />
+		</table>
+	</form>
+</div>
+<!-- 修改窗口 -->
+<div id="edit-dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'"
+	style="width: 450px; padding: 10px;">
+	<form id="edit-form" method="post">
+		<input type="hidden" id="edit-id" name="cid" />
+		<table>
+			<tr>
+				<td width="60" align="right">分类名称:</td>
+				<td><input type="text" id="edit-name" name="cname" class="wu-text easyui-validatebox"
+					data-options="required:true, missingMessage:'请填写分类名称'" /></td>
+			</tr>
 		</table>
 	</form>
 </div>
@@ -64,9 +78,38 @@
 			data : data,
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '添加成功！', 'info');
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#add-dialog').dialog('close');
 					$('#tt').tree('reload');
+					closeCategoryTab();
+				} else {
+					$.messager.alert('信息提示', data.msg, 'warning');
+				}
+			}
+		});
+	}
+	
+	/**
+	 *  修改记录
+	 */
+	function edit() {
+		var validate = $("#edit-form").form("validate");
+		if (!validate) {
+			$.messager.alert("消息提醒", "请检查你输入的数据!", "warning");
+			return;
+		}
+		var data = $("#edit-form").serialize();
+		$.ajax({
+			url : '../category/saveOrUpdate',
+			dataType : 'json',
+			type : 'post',
+			data : data,
+			success : function(data) {
+				if (data.type == 'success') {
+					$.messager.alert('信息提示', data.msg, 'info');
+					$('#edit-dialog').dialog('close');
+					$('#tt').tree('reload');
+					closeCategoryTab();
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
 				}
@@ -94,6 +137,7 @@
 						if (data.type == 'success') {
 							$.messager.alert('信息提示', data.msg, 'info');
 							$('#tt').tree('reload');
+							closeCategoryTab();
 						} else {
 							$.messager.alert('信息提示', data.msg, 'warning');
 						}
@@ -132,12 +176,12 @@
 	 * 打开修改窗口
 	 */
 	function openEdit() {
-		var item = $('#data-datagrid').datagrid('getSelected');
-		if (item == null || item.length == 0) {
+		var pnode = $('#tt').tree('getSelected');
+		console.log(pnode);
+		if (pnode == null || pnode.length == 0) {
 			$.messager.alert('信息提示', '请选择要修改的数据！', 'info');
 			return;
 		}
-
 		$('#edit-dialog').dialog(
 				{
 					closed : false,
@@ -155,9 +199,8 @@
 						}
 					} ],
 					onBeforeOpen : function() {
-						$("#edit-id").val(item.cid);
-						$("#edit-name").val(item.cname);
-						$("#edit-remark").val(item.cremark);
+						$("#edit-id").val(pnode.id);
+						$("#edit-name").val(pnode.text);
 					}
 				});
 	}
@@ -178,4 +221,8 @@
 				});
 			}
 		});
+	
+	 function closeCategoryTab(){
+			closeTab('产品管理');
+		}
 </script>

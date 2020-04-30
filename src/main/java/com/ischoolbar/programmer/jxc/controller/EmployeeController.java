@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,27 +74,8 @@ public class EmployeeController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Employee emp) {
-		boolean hasId = emp.getEid() == null ? false : true;
-		Map<String, Object> ret = new HashMap<>();
-		if (StringUtils.isEmpty(emp.getEname())) {
-			ret.put("type", "error");
-			ret.put("msg", "员工名不能为空");
-			return ret;
-		}
-		if (!hasId && isExist(emp.getEname())) {
-			ret.put("type", "error");
-			ret.put("msg", "该员工已经存在，请重新输入！");
-			return ret;
-		}
-		if (!empService.saveOrUpdate(emp)) {
-			ret.put("type", "error");
-			ret.put("msg", "新增员工异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", hasId ? "员工修改成功！" : "员工添加成功！");
-		return ret;
+	public Map<String, Object> addOrUpdate(Employee emp,HttpServletRequest request) {
+		return empService.addOrUpdate(emp,request);
 
 	}
 
@@ -108,18 +90,8 @@ public class EmployeeController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer eid) {
-		Map<String, Object> ret = new HashMap<>();
-
-		if (!empService.removeById(eid)) {
-			ret.put("type", "error");
-			ret.put("msg", "删除员工异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", "删除成功！");
-		return ret;
-
+	public Map<String, Object> delete(Integer eid,HttpServletRequest request) {
+		return empService.delete(eid,request);
 	}
 	
 	/**
@@ -132,13 +104,5 @@ public class EmployeeController {
 		return empService.list(new QueryWrapper<Employee>().orderByAsc("eorder"));
 	}
 
-	/**
-	 * 判断该员工名称是否在数据库中已存在
-	 * 
-	 * @param cName
-	 * @return
-	 */
-	private boolean isExist(String ename) {
-		return empService.getOne(new QueryWrapper<Employee>().eq("ename", ename)) == null ? false : true;
-	}
+	
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -103,39 +105,8 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Product product) {
-		boolean hasId = product.getProductId() == null ? false : true;
-		Map<String, Object> ret = new HashMap<>();
-		if (StringUtils.isEmpty(product.getProductName())) {
-			ret.put("type", "error");
-			ret.put("msg", "品牌名不能为空");
-			return ret;
-		}
-		if (!hasId && isExist(product.getProductName())) {
-			ret.put("type", "error");
-			ret.put("msg", "该品牌已经存在，请重新输入！");
-			return ret;
-		}
-		if (!productService.saveOrUpdate(product)) {
-			ret.put("type", "error");
-			ret.put("msg", "新增品牌异常，请联系管理员！");
-			return ret;
-		}
-		// 添加商品同时，检查库存当中有没有该商品，如果没有，则添加
-		if (!hasId) {
-			List<Inventory> list = inventoryService.list(new QueryWrapper<Inventory>().eq("product_id", product.getProductId()));
-			if (list == null || list.size() < 1) {
-				Inventory inv = new Inventory();
-				inv.setInventoryNum(0);
-				inv.setProductId(product.getProductId());
-				inv.setStoreId(1);
-				inventoryService.saveOrUpdate(inv);
-			}
-		}
-
-		ret.put("type", "success");
-		ret.put("msg", hasId ? "品牌修改成功！" : "品牌添加成功！");
-		return ret;
+	public Map<String, Object> addOrUpdate(Product product, HttpServletRequest request) {
+		return productService.addOrUpdate(product,request);
 
 	}
 
@@ -150,19 +121,8 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer productId) {
-		Map<String, Object> ret = new HashMap<>();
-
-		if (!productService.removeById(productId)) {
-			ret.put("type", "error");
-			ret.put("msg", "删除品牌异常，请联系管理员！");
-			return ret;
-		}
-		// 删除商品的同时，删除库存列表中对应的商品
-		inventoryService.remove(new QueryWrapper<Inventory>().eq("product_id", productId));
-		ret.put("type", "success");
-		ret.put("msg", "删除成功！");
-		return ret;
+	public Map<String, Object> delete(Integer productId, HttpServletRequest request) {
+		return productService.delete(productId,request);
 	}
 	
 	/**
@@ -175,15 +135,7 @@ public class ProductController {
 		return productService.list();
 	}
 
-	/**
-	 * 判断该品牌名称是否在数据库中已存在
-	 * 
-	 * @param cName
-	 * @return
-	 */
-	private boolean isExist(String productName) {
-		return productService.getOne(new QueryWrapper<Product>().eq("product_name", productName)) == null ? false : true;
-	}
+	
 	
 	
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ischoolbar.programmer.jxc.entity.Customer;
 import com.ischoolbar.programmer.jxc.service.ICustomerService;
+import com.ischoolbar.programmer.service.admin.LogService;
 
 /**
  * <p>
@@ -32,6 +35,8 @@ import com.ischoolbar.programmer.jxc.service.ICustomerService;
 public class CustomerController {
 	@Autowired
 	ICustomerService custService;
+	@Autowired
+	LogService logService;
 
 	/**
 	 * 列表页面
@@ -74,30 +79,8 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
 	@ResponseBody
-	public Map<String, Object> addOrUpdate(Customer cust) {
-		boolean hasId = cust.getCustId() == null ? false : true;
-		Map<String, Object> ret = new HashMap<>();
-		if (StringUtils.isEmpty(cust.getCustName())) {
-			ret.put("type", "error");
-			ret.put("msg", "客户名不能为空");
-			return ret;
-		}
-		if (!hasId && isExist(cust.getCustName())) {
-			ret.put("type", "error");
-			ret.put("msg", "该客户已经存在，请重新输入！");
-			return ret;
-		}
-		if (!hasId) {// 新增时，添加新增日期
-			cust.setCreateTime(new Date());
-		}
-		if (!custService.saveOrUpdate(cust)) {
-			ret.put("type", "error");
-			ret.put("msg", "新增客户异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", hasId ? "客户修改成功！" : "客户添加成功！");
-		return ret;
+	public Map<String, Object> addOrUpdate(Customer cust,HttpServletRequest request) {
+		return custService.addOrUpdate(cust,request);
 
 	}
 
@@ -112,17 +95,8 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public Map<String, Object> delete(Integer custId) {
-		Map<String, Object> ret = new HashMap<>();
-
-		if (!custService.removeById(custId)) {
-			ret.put("type", "error");
-			ret.put("msg", "删除客户异常，请联系管理员！");
-			return ret;
-		}
-		ret.put("type", "success");
-		ret.put("msg", "删除成功！");
-		return ret;
+	public Map<String, Object> delete(Integer custId,HttpServletRequest request) {
+		return custService.delete(custId,request);
 
 	}
 	
@@ -132,13 +106,5 @@ public class CustomerController {
 		return custService.list();
 	}
 
-	/**
-	 * 判断该客户名称是否在数据库中已存在
-	 * 
-	 * @param cName
-	 * @return
-	 */
-	private boolean isExist(String custName) {
-		return custService.getOne(new QueryWrapper<Customer>().eq("cust_name", custName)) == null ? false : true;
-	}
+	
 }

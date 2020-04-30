@@ -168,6 +168,7 @@
 		idField:'id',
 	    treeField:'name',
 		fit:true,
+		nowrap:false,
 		columns:[[
 			{ field:'chk',checkbox:true},
 			{ field:'content',title:'日志内容',width:100,sortable:true},

@@ -24,14 +24,14 @@
 }
 </style>
 <!-- Begin of easyui-dialog -->
-<div id="add-dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'"
+<!-- <div id="add-dialog" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'"
 	style="width: 450px; padding: 10px;">
 	<form id="add-form" method="post">
 		<table>
 
-			<!--  产品分类，Tree 树中选择的  -->
+			 产品分类，Tree 树中选择的 
 			<input type="hidden" name="cid" id="add-product-cid" />
-			<!-- 品牌 -->
+			品牌
 			<tr>
 				<td width="60" align="right">品牌:</td>
 				<td><input type="text" name="brandId" class="wu-text easyui-combobox"
@@ -40,69 +40,43 @@
 						valueField : 'brandId',textField : 'brandName'
 					" /></td>
 			</tr>
-			<!-- 产品名称 -->
+			产品名称
 			<tr>
 				<td width="60" align="right">产品名称:</td>
 				<td><input type="text" name="productName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写产品名称'" /></td>
 			</tr>
 
-			<!-- 备注 -->
+			备注
 			<tr>
 				<td align="right">备注:</td>
 				<td><textarea name="productRemark" rows="6" class="wu-textarea" style="width: 260px"></textarea></td>
 			</tr>
 		</table>
 	</form>
-</div>
+</div> -->
 
 <%@include file="../../common/footer.jsp"%>
 
 <!-- End of easyui-dialog -->
 <script type="text/javascript">
 // 刷新datagrid方法，保存到top中
-window.top["reload_inventory"] = function(){
-	$("#data-datagrid").datagrid('load');
+function frash(){
+	$("#data-datagrid").datagrid('reload');
 }
-	/** 
-	 * 载入产品数据
-	 private Integer productId;
-
-	    private String productName;
-
-	    private Integer brandId;
-	    
-	    private Integer cid;
-
-	    private Long productPrice;
-
-	    private Integer orderId;
-
-	    private Integer state;
-
-	    private String productRemark;
-	    
-	    private Integer inventoryId;
-
-	    private Integer productId;
-
-	    private Integer inventoryNum;
-	    
-	    private Integer storeId;// 所在仓库
-
-	    private String inventoryRemark;
-	 */
 	/**
 	初始化库存列表
 	 */
 	function initialize() {
+		EasyUILoad();
 		$.ajax({
 			url : 'initialize',
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
 				if (data.type == 'success') {
-					$.messager.alert('信息提示', '初始化成功！', 'info');
+					dispalyEasyUILoad();
+					$.messager.alert('信息提示', data.msg, 'info');
 					$('#data-datagrid').datagrid('reload');
 				} else {
 					$.messager.alert('信息提示', data.msg, 'warning');
@@ -129,7 +103,7 @@ window.top["reload_inventory"] = function(){
 						striped : true,
 						rowStyler : function(index, row) {
 							if (row.inventoryNum <= row.remind) {
-								return 'background-color:#f55;color:#fff;';
+								return 'background-color:#ffd1d2;';
 							}
 						},
 						columns : [ [
@@ -153,23 +127,13 @@ window.top["reload_inventory"] = function(){
 									title : '库存量',
 									width : 100,
 									sortable : true,
-									editor : "text",
 								}, {
 									field : 'storeId',
 									title : '所在仓库',
 									width : 100,
 									formatter : function(value, row) {
 										return row.storeName;
-									},
-									editor : {
-										type : 'combobox',
-										options : {
-											valueField : 'storeId',
-											textField : 'storeName',
-											method : 'get',
-											url : '../store/getStoreDropList'
-										}
-									}
+									}									
 								}, {
 									field : 'cid',
 									title : '分类id',
@@ -188,12 +152,12 @@ window.top["reload_inventory"] = function(){
 									formatter : function(value, row) {
 										return row.brandName;
 									}
-								}, {
+								}, /* {
 									field : 'productRemark',
 									title : '备注',
 									width : 100,
 									sortable : true,
-								} ] ],
+								} */ ] ],
 						onLoadSuccess : function(data) {
 							$('#data-datagrid').datagrid('unselectAll');
 							$(".easyui-tooltip").tooltip({
@@ -203,74 +167,9 @@ window.top["reload_inventory"] = function(){
 									});
 								}
 							});
-						},
-						onDblClickRow : onDblClickRow,
-						onClickRow : onClickRow
+						}
 					});
-	// 编辑行 索引
-	var editIndex = undefined;
-	// 结束行编辑
-	function endEditing() {
-		if (editIndex == undefined) {
-			return true;
-		}
-		// 获取选择的值
-		var inventoryId = $("#data-datagrid").datagrid('getData').rows[editIndex].inventoryId;
-		var eNum = $("#data-datagrid").datagrid('getEditor', {
-			index : editIndex,
-			field : 'inventoryNum'
-		});
-		var inventoryNum = $(eNum.target).val();
-		var ed = $("#data-datagrid").datagrid('getEditor', {
-			index : editIndex,
-			field : 'storeId'
-		});
-		var storeId = $(ed.target).combobox('getValue');
-		$.ajax({
-			url : 'saveOrUpdate',
-			dataType : 'json',
-			data : {
-				'inventoryId' : inventoryId,
-				'inventoryNum' : inventoryNum,
-				'storeId' : storeId
-			},
-			success : function() {
-				$("#data-datagrid").datagrid('endEdit', editIndex);
-				$("#data-datagrid").datagrid('reload');
-				editIndex = undefined;
-			}
-		});
-
-	}
-
-	// 双击开启行编辑
-	function onDblClickRow(index) {
-		if (editIndex != index) {
-			if (endEditing()) {
-				$("#data-datagrid").datagrid('beginEdit', index);
-				editIndex = index;
-			} else {
-				$('#data-datagrid').datagrid('selectRow', editIndex);
-			}
-		}
-	}
-	function onClickRow() {
-		endEditing();
-	}
-	// 编辑好之后保存
-	function save(){
-		endEditing();
-	}
-	// 编辑完之后，取消保存
-	function cancel(){
-		if (editIndex == undefined) {
-			return;
-		}else{
-			editIndex = undefined;
-			$("#data-datagrid").datagrid('endEdit', editIndex);
-			$("#data-datagrid").datagrid('reload');
-		}
-	}
+	
 
 	// 监听 品牌选择下拉框，当选择品牌时，根据品牌查询产品数据
 	$(function() {
@@ -315,4 +214,16 @@ window.top["reload_inventory"] = function(){
 			'unenough' : unenough
 		});
 	}
+	
+	function EasyUILoad() {
+	    $("<div class=\"datagrid-mask\"></div>").css({ display: "block", width: "100%", height: "auto !important" }).appendTo("body");
+	    $("<div class=\"datagrid-mask-msg\"></div>").html("<img  class ='img1' /> 正在运行，请稍候。。。").appendTo("body").css({ display: "block", left: ($(document.body).outerWidth(true) - 190) / 2, top: ($(window).height() - 45) / 2 });
+	}
+
+	function dispalyEasyUILoad() {
+	    $(".datagrid-mask").remove();
+	    $(".datagrid-mask-msg").remove();
+	}
+	
+	
 </script>
