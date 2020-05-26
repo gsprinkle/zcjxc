@@ -20,7 +20,7 @@
 			<div class="login-center clearfix">
 				<div class="login-center-img"><img src="../resources/admin/login/images/name.png"></div>
 				<div class="login-center-input">
-					<input type="text" name="username" id="username" value="zcburner" placeholder="请输入您的用户名" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的用户名&#39;">
+					<input type="text" name="username" id="username" placeholder="请输入您的用户名" onfocus="this.placeholder=&#39;&#39;" onblur="this.placeholder=&#39;请输入您的用户名&#39;">
 					<div class="login-center-input-text">用户名</div>
 				</div>
 			</div>

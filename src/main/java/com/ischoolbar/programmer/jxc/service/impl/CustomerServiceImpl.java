@@ -44,7 +44,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 	public Page<Customer> selectByPage(Page<Customer> page, Customer customer) {
 		QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
 		if (customer != null && StringUtils.isNotEmpty(customer.getCustName())) {
-			queryWrapper.like("cust_name", customer.getCustName());
+			queryWrapper.like("cust_name", customer.getCustName()).or()
+			.like("cust_company", customer.getCustName()).or()
+			.like("cust_address", customer.getCustName());
 		}
 		return baseMapper.selectPage(page, queryWrapper);
 	}
@@ -116,12 +118,12 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 		}else{// 有ID，表示修改,修改成功 ，记录日志
 			// 检查权限，登录的用户是否是该进货的创建者
 			Customer oldCust = baseMapper.selectById(cust.getCustId());
-			if (!user.getUsername().equals(oldCust.getUsername())) {
+			/*if (!user.getUsername().equals(oldCust.getUsername())) {
 				// 如果不是同一个操作者，提示无权限提示用户去列表中修改
 				ret.put("type", "error");
 				ret.put("msg", "对不起，您不是该数据的创建者，无权更改！");
 				return ret;
-			}
+			}*/
 			if(baseMapper.updateById(cust) > 0){
 				cust = baseMapper.selectById(cust.getCustId());
 				logService.add("用户【" + user.getUsername() + "】修改客户 {" + oldCust + "}为：-->>" + cust);

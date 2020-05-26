@@ -246,7 +246,8 @@
 		},
 		onSelect : function(node) {
 			$('#data-datagrid').datagrid('reload', {
-				cid : $(this).tree('getSelected').id
+				cid : $(this).tree('getSelected').id,
+				brandId : $("#search-brandId").combobox('getValue')
 			});
 		}
 

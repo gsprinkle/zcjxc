@@ -7,7 +7,7 @@
 		<div class="wu-toolbar-button">
 			<%@include file="../../common/menus.jsp"%>
 		</div>
-		<label>客户名称：</label> <input type="text" id="search-name" onkeyup="searchByName()" />
+		<label>关键词：</label> <input type="text" id="search-name" onkeyup="searchByName()" />
 	</div>
 	<!-- End of toolbar -->
 
@@ -23,42 +23,28 @@
 	style="width: 450px; padding: 10px;">
 	<form id="add-form" method="post">
 		<table>
-			<!-- 
- private Integer custId;
-
-    private String custName;
-
-    private String custCompany;
-
-    private String custAddress;
-
-    private String custTel;
-
-    private String custRemark;
-
-    private LocalDate createTime;
-			 -->
 			<!-- 客户名称 -->
 			<tr>
-				<td width="60" align="right">客户名:</td>
+				<td width="60" align="right">姓名:</td>
 				<td><input type="text" name="custName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写客户名'" /></td>
-			</tr>
-			<!-- 公司 -->
-			<tr>
-				<td width="60" align="right">公司:</td>
-				<td><input type="text" name="custCompany" class="wu-text" /></td>
-			</tr>
-			<!-- 地址 -->
-			<tr>
-				<td width="60" align="right">地址:</td>
-				<td><input type="text" name="custAddress" class="wu-text" /></td>
 			</tr>
 			<!-- 电话 -->
 			<tr>
 				<td width="60" align="right">电话:</td>
 				<td><input type="text" name="custTel" class="wu-text" /></td>
 			</tr>
+			<!-- 地址 -->
+			<tr>
+				<td width="60" align="right">地址:</td>
+				<td><input type="text" name="custAddress" class="wu-text" /></td>
+			</tr>
+			<!-- 公司 -->
+			<tr>
+				<td width="60" align="right">公司:</td>
+				<td><input type="text" name="custCompany" class="wu-text" /></td>
+			</tr>
+			
 			<!-- 备注 -->
 			<tr>
 				<td align="right">备注:</td>
@@ -77,24 +63,24 @@
 		<table>
 			<!-- 客户名称 -->
 			<tr>
-				<td width="60" align="right">客户名:</td>
+				<td width="60" align="right">姓名:</td>
 				<td><input type="text" id="edit-name" name="custName" class="wu-text easyui-validatebox"
 					data-options="required:true, missingMessage:'请填写客户名'" /></td>
 			</tr>
-			<!-- 公司 -->
+			<!-- 电话 -->
 			<tr>
-				<td width="60" align="right">公司:</td>
-				<td><input type="text" id="edit-company" name="custCompany" class="wu-text" /></td>
+				<td width="60" align="right">电话:</td>
+				<td><input type="text" id="edit-tel" name="custTel" class="wu-text" /></td>
 			</tr>
 			<!-- 地址 -->
 			<tr>
 				<td width="60" align="right">地址:</td>
 				<td><input type="text" id="edit-address" name="custAddress" class="wu-text" /></td>
 			</tr>
-			<!-- 电话 -->
+			<!-- 公司 -->
 			<tr>
-				<td width="60" align="right">电话:</td>
-				<td><input type="text" id="edit-tel" name="custTel" class="wu-text" /></td>
+				<td width="60" align="right">公司:</td>
+				<td><input type="text" id="edit-company" name="custCompany" class="wu-text" /></td>
 			</tr>
 			<!-- 备注 -->
 			<tr>
@@ -280,25 +266,25 @@
 			checkbox : true
 		}, {
 			field : 'custName',
-			title : '客户名称',
-			width : 100,
-			sortable : true
-		}, {
-			field : 'custCompany',
-			title : '公司名称',
-			width : 100,
-			sortable : true
-		}, {
-			field : 'custAddress',
-			title : '地址',
+			title : '姓名',
 			width : 100,
 			sortable : true
 		}, {
 			field : 'custTel',
-			title : '联系方式',
+			title : '联系电话',
 			width : 100,
 			sortable : true
+		},  {
+			field : 'custAddress',
+			title : '地址',
+			width : 500,
+			sortable : true
 		}, {
+			field : 'custCompany',
+			title : '公司名称',
+			width : 200,
+			sortable : true
+		},{
 			field : 'createTime',
 			title : '创建日期',
 			width : 100,
