@@ -9,7 +9,7 @@
 
 		<spring.version>4.3.25.RELEASE</spring.version>
 		<mybatis.version>3.4.1</mybatis.version>
-		<mysql.version>5.1.9</mysql.version>
+		<mysql.version>8.0.16</mysql.version>
 
 
 	</properties>
